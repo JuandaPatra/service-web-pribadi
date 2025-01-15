@@ -28,7 +28,21 @@ class LinkDashboardController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validated = $request->validate([
+            'source_name' => 'required',
+        ]);
+
+        Source::insert([
+            'name' => $validated['source_name']
+        ]);
+
+        $response = [
+            'data' => Source::select('id', 'name')->get(),
+            'message' => 'success'
+
+        ];
+
+        return response()->json($response, 200);
     }
 
     /**
