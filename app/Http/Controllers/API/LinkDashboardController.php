@@ -100,16 +100,15 @@ class LinkDashboardController extends Controller
                 ];
             }
             ShowLeadsSource::insert($newChecklists);
+            $response = [
+                'data'      => ShowLeads::select('id', 
+                'name', 'link')->where('id', $id)->first(),
+                'message'   => 'Success' ,
+                'sosmed' => ShowLeadsSource::select('source_id', 'show_lead_id')->where('show_lead_id', $id)->get() 
+            ];
+    
         
-            return response()->json([
-                'message' => 'Checklist updated successfully',
-                'data' =>
-                [
-                   'show_Lead' => ShowLeads::select('id', 
-                   'name', 'link')->where('id', $id)->first(),
-                   'list_source' =>  ShowLeadsSource::select('source_id', 'show_lead_id')->where('show_lead_id', $id)->get(),
-                ]
-            ]);
+            return response()->json($response, 200);
         }
         catch(\Exception $e){
             return response()->json(['error' => $e->getMessage()], 500);
